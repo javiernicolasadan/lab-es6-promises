@@ -80,8 +80,11 @@ obtainInstruction('steak', 0)
     document.querySelector("#steak").innerHTML += `<li>${step8}</li>`
     document.querySelector("#steak").innerHTML += `<li>Stake is ready!</li>`
     document.querySelector("#steakImg").removeAttribute("hidden") 
-    
   })
+  .catch((err) => {
+    console.log("There was an error", err);
+  });
+
 // Iteration 3 using async/await
 async function makeBroccoli() {
   try {
@@ -110,7 +113,8 @@ async function makeBroccoli() {
 makeBroccoli()
 
 // Bonus 2 - Promise all
-const step1Prom = obtainInstruction("brusselsSprouts", 0)
+//one way
+/* const step1Prom = obtainInstruction("brusselsSprouts", 0)
 const step2Prom = obtainInstruction("brusselsSprouts", 1)
 const step3Prom = obtainInstruction("brusselsSprouts", 2)
 const step4Prom = obtainInstruction("brusselsSprouts", 3)
@@ -131,4 +135,27 @@ Promise.all([step1Prom, step2Prom, step3Prom, step4Prom, step5Prom, step6Prom, s
   })
   .catch ((error) => {
     console.log(error)
-  })
+  }) */
+
+  //second way
+  const allPromises =  async () => {
+    const promArr = []
+    brusselsSprouts.forEach((eachStep, indexStep) => {
+      promArr.push(obtainInstruction("brusselsSprouts",indexStep))
+    })
+    
+    Promise.all(promArr)
+      .then((values) => {
+       values.forEach((step) => {
+        document.querySelector("#brusselsSprouts").innerHTML += `<li>${step}</li>`
+       })
+       document.querySelector("#brusselsSprouts").innerHTML += `<li>Brussels sprouts are ready!</li>`
+       document.querySelector("#brusselsSproutsImg").removeAttribute("hidden")
+      })
+      .catch((err) => {
+      console.log("There was an error", err);
+      });
+  }
+
+  allPromises()
+  
